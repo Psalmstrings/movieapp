@@ -56,7 +56,7 @@ body {
 .hero {  
     height: 100vh;  
     background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),  
-                url('../media/NG-en-20250324-TRIFECTA-perspective_4a8e8f5f-ae6a-4140-883b-0f6adfa9fbd6_small.png') center/cover;  
+                url('./media/NG-en-20250324-TRIFECTA-perspective_4a8e8f5f-ae6a-4140-883b-0f6adfa9fbd6_small.png') center/cover;  
     display: flex;  
     align-items: center;  
     padding: 0 50px;  
