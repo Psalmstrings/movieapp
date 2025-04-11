@@ -1,0 +1,273 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Movie Admin Dashboard</title>  
+    <style>  
+        body {  
+            background-color: #141414;  
+            color: white;  
+            padding: 20px;  
+        }  
+
+        .container {  
+            max-width: 1200px;  
+            margin: 0 auto;  
+        }  
+
+        h1 {  
+            text-align: center;  
+            color: #f2c014;  
+            margin-bottom: 30px;  
+        }  
+
+        table {  
+            width: 100%;  
+            border-collapse: collapse;  
+            background-color: rgba(0, 0, 0, 0.8);  
+            padding: 20px;  
+            border-radius: 10px;  
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);  
+        }  
+
+        th, td {  
+            padding: 15px;  
+            text-align: left;  
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);  
+        }  
+
+        th {  
+            color: #f2c014;  
+            font-weight: bold;  
+        }  
+
+        tr:hover {  
+            background-color: rgba(255, 255, 255, 0.1);  
+        }  
+
+        .action-buttons {  
+            display: flex;  
+            gap: 10px;  
+        }  
+
+        .edit-btn {  
+            background-color: #f2c014;  
+            color: black;  
+            border: none;  
+            padding: 8px 15px;  
+            border-radius: 5px;  
+            cursor: pointer;  
+            font-weight: bold;  
+        }  
+
+        .delete-btn {  
+            background-color: #E50914;  
+            color: white;  
+            border: none;  
+            padding: 8px 15px;  
+            border-radius: 5px;  
+            cursor: pointer;  
+            font-weight: bold;  
+        }  
+
+        /* Modal Styles */  
+        .modal {  
+            display: none;  
+            position: fixed;  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            height: 100%;  
+            background-color: rgba(0, 0, 0, 0.8);  
+            justify-content: center;  
+            align-items: center;  
+        }  
+
+        .modal-content {  
+            background-color: #141414;  
+            padding: 30px;  
+            border-radius: 10px;  
+            max-width: 500px;  
+            width: 100%;  
+        }  
+
+        .close-btn {  
+            position: absolute;  
+            top: 10px;  
+            right: 10px;  
+            background-color: #E50914;  
+            color: white;  
+            padding: 8px 15px;  
+            border-radius: 5px;  
+            cursor: pointer;  
+        }  
+
+        .edit-form {  
+            display: flex;  
+            flex-direction: column;  
+            gap: 15px;  
+        }  
+
+        .edit-form input, .edit-form select, .edit-form textarea {  
+            padding: 8px;  
+            background-color: rgba(255, 255, 255, 0.1);  
+            border: none;  
+            border-radius: 5px;  
+            color: white;  
+        }  
+    </style>  
+</head>  
+<body>  
+    <div class="container">  
+        <h1>Admin Dashboard</h1>  
+        <table id="moviesTable">  
+            <thead>  
+                <tr>  
+                    <th>Movie Title</th>  
+                    <th>Release Date</th>  
+                    <th>Category</th>  
+                    <th>Description</th>  
+                    <th>Action</th>  
+                </tr>  
+            </thead>  
+            <tbody id="moviesList">  
+                <!-- Movies will be dynamically added here -->  
+            </tbody>  
+        </table>  
+    </div>  
+
+    <!-- Edit Modal -->  
+    <div id="editModal" class="modal">  
+        <div class="modal-content">  
+            <button class="close-btn" onclick="closeModal()">×</button>  
+            <h2>Edit Movie Details</h2>  
+            <div class="edit-form">  
+                <input type="hidden" id="editMovieId">  
+                <input type="text" id="editMovieName" placeholder="Movie Title">  
+                <input type="date" id="editReleaseDate" placeholder="Release Date">  
+                <select id="editCategory">  
+                    <option value="Action">Action</option>  
+                    <option value="Nollywood">Nollywood</option>  
+                    <option value="Hollywood">Hollywood</option>  
+                    <option value="Comedy">Comedy</option>  
+                    <option value="Horror">Horror</option>  
+                </select>  
+                <textarea id="editDescription" placeholder="Description"></textarea>  
+                <button class="edit-btn" onclick="saveMovieChanges()">Save Changes</button>  
+            </div>  
+        </div>  
+    </div>  
+
+    <script type="module">  
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";  
+        import { getFirestore, collection, getDocs, addDoc, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";  
+
+        // Firebase Configuration  
+        const firebaseConfig = {  
+            apiKey: "AIzaSyC5kROT39vzmZztR4k2BzYSL3PFlio1tUM",  
+            authDomain: "psalmstrings-7b9a9.firebaseapp.com",  
+            projectId: "psalmstrings-7b9a9",  
+            storageBucket: "psalmstrings-7b9a9.firebasestorage.app",  
+            messagingSenderId: "765832868823",  
+            appId: "1:765832868823:web:0dd6e79ee4d3acde041192",  
+            measurementId: "G-LV8DV0TC8E"  
+        };  
+
+        // Initialize Firebase  
+        const app = initializeApp(firebaseConfig);  
+        const db = getFirestore(app);  
+
+        // Reference to the movies collection  
+        const moviesRef = collection(db, "movies");  
+
+        // Load Movies  
+        async function loadMovies() {  
+            try {  
+                const querySnapshot = await getDocs(moviesRef);  
+                const moviesList = document.getElementById("moviesList");  
+                moviesList.innerHTML = "";  
+
+                querySnapshot.forEach(async (doc) => {  
+                    const movieData = doc.data();  
+                    const movieId = doc.id;  
+
+                    const movieRow = document.createElement("tr");  
+                    movieRow.innerHTML = `  
+                        <td>${movieData.name}</td>  
+                        <td>${movieData.releaseDate}</td>  
+                        <td>${movieData.category}</td>  
+                        <td>${movieData.description}</td>  
+                        <td>  
+                            <div class="action-buttons">  
+                                <button class="edit-btn" onclick="openEditModal('${movieId}')">Edit</button>  
+                                <button class="delete-btn" onclick="deleteMovie('${movieId}')">Delete</button>  
+                            </div>  
+                        </td>  
+                    `;  
+                    moviesList.appendChild(movieRow);  
+                });  
+            } catch (error) {  
+                console.error("Error loading movies: ", error);  
+            }  
+        }  
+
+        // Open Edit Modal  
+        function openEditModal(movieId) {  
+            const docRef = doc(db, "movies", movieId);  
+            getDocs(docRef).then(doc => {  
+                const data = doc.data();  
+                document.getElementById("editMovieId").value = movieId;  
+                document.getElementById("editMovieName").value = data.name;  
+                document.getElementById("editReleaseDate").value = data.releaseDate;  
+                document.getElementById("editCategory").value = data.category;  
+                document.getElementById("editDescription").value = data.description;  
+            });  
+            document.getElementById("editModal").style.display = "flex";  
+        }  
+
+        // Close Modal  
+        function closeModal() {  
+            document.getElementById("editModal").style.display = "none";  
+        }  
+
+        // Save Movie Changes  
+        async function saveMovieChanges() {  
+            const movieId = document.getElementById("editMovieId").value;  
+            const updatedData = {  
+                name: document.getElementById("editMovieName").value,  
+                releaseDate: document.getElementById("editReleaseDate").value,  
+                category: document.getElementById("editCategory").value,  
+                description: document.getElementById("editDescription").value  
+            };  
+
+            try {  
+                await setDoc(doc(db, "movies", movieId), updatedData);  
+                alert("Movie details updated successfully!");  
+                loadMovies();  
+                closeModal();  
+            } catch (error) {  
+                console.error("Error updating movie: ", error);  
+                alert("Failed to update movie details");  
+            }  
+        }  
+
+        // Delete Movie  
+        async function deleteMovie(movieId) {  
+            if (confirm("Are you sure you want to delete this movie?")) {  
+                try {  
+                    await deleteDoc(doc(db, "movies", movieId));  
+                    alert("Movie deleted successfully!");  
+                    loadMovies();  
+                } catch (error) {  
+                    console.error("Error deleting movie: ", error);  
+                    alert("Failed to delete movie");  
+                }  
+            }  
+        }  
+
+        // Load movies when page loads  
+        window.onload = loadMovies();  
+    </script>  
+</body>  
+</html>  

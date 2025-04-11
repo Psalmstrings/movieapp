@@ -1,0 +1,283 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Document</title> 
+    <link rel="shortcut icon" href="../media/WhatsApp Image 2025-04-04 at 04.52.12_e46090e3.jpg" type="image/x-icon">
+    <style>  
+        * {  
+            margin: 0;  
+            padding: 0;  
+            box-sizing: border-box;  
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;  
+        }  
+
+        body {  
+            background-color: #141414;  
+            color: white;  
+        }  
+
+        /* Header Styles */  
+        .header {  
+            background-color: #000000;  
+            padding: 20px 50px;  
+            display: flex;  
+            justify-content: space-between;  
+            align-items: center;  
+        }  
+
+        .header button {  
+            padding: 10px;  
+            background: rgb(252, 210, 24);  
+            border: none;  
+            border-radius: 5px;  
+            font-size: 1.1rem;  
+            font-weight: bold;  
+            color: black;  
+            cursor: pointer;  
+        }  
+
+        .logo {  
+            color: rgb(252, 210, 24);  
+            font-size: 2rem;  
+            font-weight: bold;  
+        }  
+
+        .nav-links a {  
+            color: white;  
+            text-decoration: none;  
+            margin-left: 30px;  
+            font-size: 1.1rem;  
+        }  
+
+        /* Main Content */  
+        .signup-container {  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            min-height: 100vh;  
+            padding: 20px;  
+        }  
+
+        .signup-form {  
+            background: rgba(0, 0, 0, 0.8);  
+            padding: 40px;  
+            border-radius: 10px;  
+            width: 100%;  
+            max-width: 600px;  
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);  
+        }  
+
+        .form-title {  
+            color: rgb(252, 210, 24);  
+            font-size: 2.5rem;  
+            margin-bottom: 30px;  
+            text-align: center;  
+        }  
+
+        .form-group {  
+            margin-bottom: 20px;  
+        }  
+
+        .form-group label {  
+            display: block;  
+            margin-bottom: 8px;  
+            color: #fff;  
+            font-size: 1rem;  
+        }  
+
+        .form-group input {  
+            width: 100%;  
+            padding: 12px;  
+            background: rgba(255, 255, 255, 0.1);  
+            border: none;  
+            border-radius: 5px;  
+            color: white;  
+            font-size: 1rem;  
+        }  
+
+        .form-group input:focus {  
+            outline: 2px solid rgb(252, 210, 24);  
+            background: rgba(255, 255, 255, 0.2);  
+        }  
+
+        .submit-btn {  
+            width: 100%;  
+            padding: 15px;  
+            background: rgb(252, 210, 24);  
+            border: none;  
+            border-radius: 5px;  
+            font-size: 1.1rem;  
+            font-weight: bold;  
+            color: black;  
+            cursor: pointer;  
+            transition: background-color 0.3s ease;  
+        }  
+
+        .submit-btn:hover {  
+            background: rgb(143, 117, 4);  
+        }  
+
+        .auth-links {  
+            text-align: center;  
+            margin-top: 20px;  
+        }  
+
+        .auth-links a {  
+            color: #ccc;  
+            text-decoration: none;  
+            margin: 0 10px;  
+            font-size: 1rem;  
+        }  
+
+        .auth-links a:hover {  
+            color: #E50914;  
+        }  
+
+        /* Responsive Design */  
+        @media (max-width: 768px) {  
+            .header {  
+                padding: 20px;  
+                flex-direction: column;  
+                gap: 20px;  
+            }  
+            .form-title{
+                font-size: 24px;
+            }
+            .signup-form {  
+                padding: 20px;  
+            } 
+            .header button{
+                display: none;
+            } 
+        }  
+
+        /* Optional: Form Validation Error Styles */  
+        .error {  
+            color: #E50914;  
+            font-size: 18px;  
+            margin-top: 5px;  
+            /* display: none;   */
+        }  
+    </style>  
+</head>  
+<body>  
+    <header class="header">  
+        <div class="logo">PsalmStrings</div>  
+        <button>Sign In</button>  
+    </header>  
+    <main class="signup-container">  
+        <form class="signup-form" id="signUpForm">  
+            <h1 class="form-title">Create Your Account</h1>  
+            <div class="form-group">  
+                <label for="fullName">Full Name</label>  
+                <input type="text" id="fullName" name="fullName" placeholder="Enter your Full Name" required>  
+            </div>  
+
+            <div class="form-group">  
+                <label for="email">Email Address</label>  
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>  
+            </div>  
+
+            <div class="form-group">  
+                <label for="password">Password</label>  
+                <input type="password" id="password" name="password" placeholder="Create a password" required>  
+            </div>  
+
+            <div class="form-group">  
+                <label for="confirmPassword">Confirm Password</label>  
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>  
+            </div>  
+
+            <div class="form-group">  
+                <div id="errorP" class="error"></div>  
+            </div>  
+
+            <button type="submit" class="submit-btn" id="submitBTN">Sign Up</button>  
+
+            <div class="auth-links">  
+                <p>Already have an account? <a href="./signin.html">Log In</a></p>  
+            </div>  
+        </form>  
+    </main>  
+
+    <script type="module">  
+         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+         import { getFirestore, collection, setDoc, doc, } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+         import { getAuth, createUserWithEmailAndPassword, } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
+        const firebaseConfig = {  
+            apiKey: "AIzaSyC5kROT39vzmZztR4k2BzYSL3PFlio1tUM",  
+            authDomain: "psalmstrings-7b9a9.firebaseapp.com",  
+            projectId: "psalmstrings-7b9a9",  
+            storageBucket: "psalmstrings-7b9a9.firebasestorage.app",  
+            messagingSenderId: "765832868823",  
+            appId: "1:765832868823:web:0dd6e79ee4d3acde041192",  
+            measurementId: "G-LV8DV0TC8E"  
+        };  
+
+         // Initialize Firebase
+         const app = initializeApp(firebaseConfig);
+        // Inititalize Auth
+        const auth = getAuth(app);
+        // Initialize Firestore
+        const db = getFirestore(app);
+        //Collection Reference(s)
+        const userColRef = collection(db, 'users');
+        
+        signUpForm.addEventListener("submit", createUserAccount)
+        async function createUserAccount(e) {   
+            try {
+                // spinner.classList.remove("d-none")
+                submitBTN.disabled = true
+                errorP.textContent = "";
+                e.preventDefault();         
+
+                const userDetails ={
+                name: signUpForm.fullName.value.trim(),
+                email: signUpForm.email.value.trim(),
+                password: signUpForm.password.value.trim(),
+                confirmPassword: signUpForm.confirmPassword.value.trim(),
+                // checkbox: signUpForm.checkbox.value,
+                // address: signUpForm.address.value.trim(),
+                }
+            let emailRegex =/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
+            
+            if (!emailRegex.test(userDetails.email)) {
+                throw new Error("*Invalid email address");
+            }
+            if (userDetails.password.length < 6) {
+                throw new Error("*Password should be at least 6 character");
+            }
+            if (userDetails.password !== userDetails.confirmPassword) {
+                throw new Error("*Password does not match");
+            }
+            
+            const {password, confirmPassword, ...details} = userDetails
+            const res = await createUserWithEmailAndPassword(
+                auth,
+                details.email,
+                password
+            );
+            console.log(res);
+            const docRef = doc(userColRef, res.user.uid);
+            const docRes = await setDoc(docRef, details);
+            alert("Account created successfully!");
+            location.href = "../pages/signin.html"; 
+            } catch (error) {
+                if (error.message === "Firebase: Error (auth/email-already-in-use).") {
+                    errorP.textContent = "Email already exists!";
+                    return;
+                }
+                errorP.textContent = error.message;
+                console.log(error);
+                
+            }finally{
+                // spinner.classList.add("d-none");
+                submitBTN.disabled = false;
+            }
+        }
+    </script>  
+</body>  
+</html>  

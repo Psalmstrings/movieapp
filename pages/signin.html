@@ -1,0 +1,261 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>PsalmStrings - Sign In</title> 
+    <link rel="shortcut icon" href="../media/WhatsApp Image 2025-04-04 at 04.52.12_e46090e3.jpg" type="image/x-icon">
+    <style>  
+        * {  
+            margin: 0;  
+            padding: 0;  
+            box-sizing: border-box;  
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;  
+        }  
+
+        body {  
+            background-color: #141414;  
+            color: white;  
+        }  
+
+        /* Header Styles */  
+        .header {  
+            background-color: #000000;  
+            padding: 20px 50px;  
+            display: flex;  
+            justify-content: space-between;  
+            align-items: center;  
+        }  
+
+        .logo {  
+            color: rgb(252, 210, 24);   
+            font-size: 2rem;  
+            font-weight: bold;  
+        }  
+
+        .nav-links a {  
+            color: white;  
+            text-decoration: none;  
+            margin-left: 30px;  
+            font-size: 1.1rem;  
+        }  
+
+        /* Main Content */  
+        .signin-container {  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            min-height: 100vh;  
+            padding: 20px;  
+        }  
+
+        .signin-form {  
+            background: rgba(0, 0, 0, 0.8);  
+            padding: 40px;  
+            border-radius: 10px;  
+            width: 100%;  
+            max-width: 600px;  
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);  
+        }  
+
+        .form-title {  
+            color: rgb(252, 210, 24);  
+            font-size: 2.5rem;  
+            margin-bottom: 30px;  
+            text-align: center;  
+        }  
+
+        .form-group {  
+            margin-bottom: 20px;  
+        }  
+
+        .form-group label {  
+            display: block;  
+            margin-bottom: 8px;  
+            color: #fff;  
+            font-size: 1rem;  
+        }  
+
+        .form-group input {  
+            width: 100%;  
+            padding: 12px;  
+            background: rgba(255, 255, 255, 0.1);  
+            border: none;  
+            border-radius: 5px;  
+            color: white;  
+            font-size: 1rem;  
+        }  
+
+        .form-group input:focus {  
+            outline: 2px solid rgb(252, 210, 24);   
+            background: rgba(255, 255, 255, 0.2);  
+        }  
+
+        .submit-btn {  
+            width: 100%;  
+            padding: 15px;  
+            background: rgb(252, 210, 24);   
+            border: none;  
+            border-radius: 5px;  
+            font-size: 1.1rem;  
+            font-weight: bold;  
+            color: black;  
+            cursor: pointer;  
+            transition: background-color 0.3s ease;  
+        }  
+
+        .submit-btn:hover {  
+            background: rgb(112, 92, 4);   
+        }  
+
+        .loading {  
+            display: none;  
+            width: 30px;  
+            height: 30px;  
+            border: 3px solid #f3f3f3;  
+            border-radius: 50%;  
+            border-top: 3px solid #E50914;  
+            animation: spin 1s linear infinite;  
+            margin: 0 auto;  
+        }  
+
+        @keyframes spin {  
+            0% { transform: rotate(0deg); }  
+            100% { transform: rotate(360deg); }  
+        }  
+
+        .text-danger {  
+            color: #E50914;  
+            margin-top: 10px;  
+            text-align: center;  
+        }  
+
+        .auth-links {  
+            text-align: center;  
+            margin-top: 20px;  
+        }  
+
+        .auth-links a {  
+            color: #ccc;  
+            text-decoration: none;  
+            margin: 0 10px;  
+            font-size: 1rem;  
+        }  
+
+        .auth-links a:hover {  
+            color: #E50914;  
+        }  
+
+        /* Responsive Design */  
+        @media (max-width: 768px) {  
+            .header {  
+                padding: 20px;  
+                flex-direction: column;  
+                gap: 20px;  
+            }  
+
+            .signin-form {  
+                padding: 20px;  
+            }  
+        }  
+    </style>  
+</head>  
+<body>  
+    <header class="header">  
+        <div class="logo">PsalmStrings</div>    
+    </header>  
+
+    <main class="signin-container">  
+        <form class="signin-form" id="signInForm">  
+            <h1 class="form-title">Welcome Back</h1>  
+            <div class="form-group">  
+                <label for="email">Email Address</label>  
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>  
+            </div>  
+
+            <div class="form-group">  
+                <label for="password">Password</label>  
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>  
+            </div>  
+
+            <div class="form-group">  
+                <div id="errorP" class="text-danger"></div>  
+                <div class="loading" id="spinner"></div>  
+            </div>  
+
+            <button type="submit" class="submit-btn" id="submitBTN">Sign In</button>  
+
+            <div class="auth-links">  
+                <p>Don't have an account? <a href="./sigup.html">Sign Up</a></p>  
+                <a href="#forgot-password">Forgot Password?</a>  
+            </div>  
+        </form>  
+    </main>  
+
+    <script type="module">  
+        // Import the functions you need from the SDKs you need  
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";  
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";  
+
+        // Your web app's Firebase configuration  
+        const firebaseConfig = {  
+            apiKey: "AIzaSyC5kROT39vzmZztR4k2BzYSL3PFlio1tUM",  
+            authDomain: "psalmstrings-7b9a9.firebaseapp.com",  
+            projectId: "psalmstrings-7b9a9",  
+            storageBucket: "psalmstrings-7b9a9.firebasestorage.app",  
+            messagingSenderId: "765832868823",  
+            appId: "1:765832868823:web:0dd6e79ee4d3acde041192",  
+            measurementId: "G-LV8DV0TC8E"  
+        };  
+
+        // Initialize Firebase  
+        const app = initializeApp(firebaseConfig);  
+        const auth = getAuth(app);  
+
+        const signInForm = document.getElementById('signInForm');  
+        const submitBTN = document.getElementById('submitBTN');  
+        const spinner = document.getElementById('spinner');  
+        const errorP = document.getElementById('errorP');  
+
+        signInForm.addEventListener("submit", logInUser);  
+
+        async function logInUser(e) {  
+            try {  
+                spinner.style.display = 'block';  
+                submitBTN.disabled = true;  
+                errorP.textContent = '';  
+                e.preventDefault();  
+
+                const email = document.getElementById('email').value.trim();  
+                const password = document.getElementById('password').value.trim();  
+
+                await signInWithEmailAndPassword(auth, email, password);  
+                alert('Sign in successful');
+                // Redirect to the dashboard or home page after successful sign-in
+                window.location.href = '../pages/homepage.html';  
+            } catch (error) {  
+                console.log(error.message);  
+                switch (error.code) {  
+                    case 'auth/invalid-email':  
+                        errorP.textContent = '* Invalid email address.';  
+                        break;  
+                    case 'auth/user-not-found':  
+                        errorP.textContent = '* User not found.';  
+                        break;  
+                    case 'auth/wrong-password':  
+                        errorP.textContent = '* Incorrect password.';  
+                        break;  
+                    case 'auth/too-many-requests':  
+                        errorP.textContent = '* Too many attempts. Try again later.';  
+                        break;  
+                    default:  
+                        errorP.textContent = '* An unexpected error occurred.';  
+                }  
+            } finally {  
+                spinner.style.display = 'none';  
+                submitBTN.disabled = false;  
+            }  
+        }  
+    </script>  
+</body>  
+</html>  

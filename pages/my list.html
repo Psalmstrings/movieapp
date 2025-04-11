@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My List - PsalmStrings</title>
+    <link rel="stylesheet" href="../css/my-list.css">
+    <link rel="shortcut icon" href="../media/WhatsApp Image 2025-04-04 at 04.52.12_e46090e3.jpg" type="image/x-icon">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">PsalmStrings</div>
+        <div class="hamburger">☰</div>
+        <div class="right-side">
+          <div class="menu">
+              <div class="menu-content">
+                
+                <a href="./homepage.html">Home</a>
+                <a href="../pages/my list.html">My List</a>
+                <div class="profile-dropdown">
+                  <a href="#" class="profile-link">Profile</a>
+                  <div class="dropdown-content">
+                      <a href="./profile.html">Profile</a>
+                      <a href="/settings">Settings</a>
+                      <div class="dropdown-divider"></div>
+                      <a href="/logout" class="logout-link">Logout</a>
+                  </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-content">
+        <h1>My Watchlist</h1>
+        <div class="content-list" id="watchlist-container">
+            <!-- Watchlist items will be dynamically inserted here -->
+            <div class="empty-state">
+                <img src="../media/empty-list.png" alt="Empty list">
+                <h2>Your watchlist is empty</h2>
+                <p>Add movies and shows to your watchlist and they'll appear here</p>
+                <a href="../pages/homepage.html" class="browse-button">Browse Content</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Psalm Strings. All rights reserved.</p>
+        <p>Terms of Use | Privacy Policy</p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { 
+    getFirestore,
+    collection,
+    query,
+    where,
+    getDocs,
+    deleteDoc,
+    doc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyC5kROT39vzmZztR4k2BzYSL3PFlio1tUM",
+    authDomain: "psalmstrings-7b9a9.firebaseapp.com",
+    projectId: "psalmstrings-7b9a9",
+    storageBucket: "psalmstrings-7b9a9.appspot.com",
+    messagingSenderId: "765832868823",
+    appId: "1:765832868823:web:0dd6e79ee4d3acde041192",
+    measurementId: "G-LV8DV0TC8E"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// DOM elements
+const watchlistContainer = document.getElementById('watchlist-container');
+
+// Load watchlist when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    loadWatchlist();
+});
+
+// Function to load watchlist from Firestore
+async function loadWatchlist() {
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            showLoginPrompt();
+            return;
+        }
+
+        try {
+            const q = query(collection(db, "watchlist"), where("userId", "==", user.uid));
+            const querySnapshot = await getDocs(q);
+            
+            if (querySnapshot.empty) {
+                showEmptyState();
+                return;
+            }
+
+            renderWatchlist(querySnapshot);
+        } catch (error) {
+            console.error("Error loading watchlist:", error);
+            showErrorState();
+        }
+    });
+}
+
+// Function to render watchlist items
+function renderWatchlist(querySnapshot) {
+    watchlistContainer.innerHTML = ''; // Clear existing content
+    
+    querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const watchlistItem = document.createElement('div');
+        watchlistItem.className = 'content-item';
+        watchlistItem.innerHTML = `
+            <img src="${data.imageUrl}" alt="${data.title}">
+            <div class="content-info">
+                <h3>${data.title}</h3>
+                <p>${data.episode}</p>
+                <button class="play-btn">Play</button>
+                <button class="remove-btn" data-id="${doc.id}">Remove</button>
+            </div>
+        `;
+        watchlistContainer.appendChild(watchlistItem);
+    });
+
+    // Add event listeners to remove buttons
+    document.querySelectorAll('.remove-btn').forEach(button => {
+        button.addEventListener('click', removeFromWatchlist);
+    });
+}
+
+// Function to remove item from watchlist
+async function removeFromWatchlist(event) {
+    const docId = event.target.getAttribute('data-id');
+    
+    try {
+        await deleteDoc(doc(db, "watchlist", docId));
+        showToast('Removed from watchlist');
+        
+        // Reload watchlist
+        loadWatchlist();
+    } catch (error) {
+        console.error("Error removing item:", error);
+        showToast('Failed to remove item', true);
+    }
+}
+
+// Function to show empty state
+function showEmptyState() {
+    watchlistContainer.innerHTML = `
+        <div class="empty-state">
+            <img src="../media/empty-list.png" alt="Empty list">
+            <h2>Your watchlist is empty</h2>
+            <p>Add movies and shows to your watchlist and they'll appear here</p>
+            <a href="../pages/homepage.html" class="browse-button">Browse Content</a>
+        </div>
+    `;
+}
+
+// Function to show login prompt
+function showLoginPrompt() {
+    watchlistContainer.innerHTML = `
+        <div class="empty-state">
+            <img src="../media/login-required.png" alt="Login required">
+            <h2>Please sign in to view your watchlist</h2>
+            <p>Your watchlist is saved to your account</p>
+            <a href="../auth/login.html" class="browse-button">Sign In</a>
+        </div>
+    `;
+}
+
+// Function to show error state
+function showErrorState() {
+    watchlistContainer.innerHTML = `
+        <div class="empty-state">
+            <img src="../media/error.png" alt="Error">
+            <h2>Couldn't load your watchlist</h2>
+            <p>Please try again later</p>
+            <button class="browse-button" onclick="location.reload()">Retry</button>
+        </div>
+    `;
+}
+
+// Function to show toast notifications
+function showToast(message, isError = false) {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.padding = '12px 24px';
+    toast.style.backgroundColor = isError ? '#f44336' : '#4CAF50';
+    toast.style.color = 'white';
+    toast.style.borderRadius = '4px';
+    toast.style.zIndex = '1000';
+    toast.style.transition = 'opacity 0.5s';
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
+    }
+
+    
+      // Mobile menu functionality
+      document.addEventListener('DOMContentLoaded', function() {
+          const hamburger = document.querySelector('.hamburger');
+          const rightSide = document.querySelector('.right-side');
+          const profileDropdown = document.querySelector('.profile-dropdown');
+          const profileLink = document.querySelector('.profile-link');
+          
+          // Toggle menu visibility when hamburger is clicked
+          hamburger.addEventListener('click', function(e) {
+              e.stopPropagation(); // Prevent event from bubbling to document
+              rightSide.classList.toggle('active');
+          });
+          
+          // Toggle profile dropdown
+          profileLink.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              const dropdown = this.nextElementSibling;
+              dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+          });
+          
+          // Close menu when clicking outside
+          document.addEventListener('click', function(event) {
+              if (!event.target.closest('.right-side') && !event.target.closest('.hamburger')) {
+                  rightSide.classList.remove('active');
+              }
+              if (!event.target.closest('.profile-dropdown')) {
+                  document.querySelectorAll('.dropdown-content').forEach(d => {
+                      d.style.display = 'none';
+                  });
+              }
+          });
+      });
+</script>
+</body>
+</html>

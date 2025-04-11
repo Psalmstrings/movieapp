@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - PsalmStrings</title>
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="shortcut icon" href="../media/WhatsApp Image 2025-04-04 at 04.52.12_e46090e3.jpg" type="image/x-icon">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">PsalmStrings</div>
+        <div class="hamburger">☰</div>
+        <div class="right-side">
+            <input type="text" class="search-bar" placeholder="Search">
+            <nav class="nav-links">
+                <a href="./homepage.html">Home</a>
+                <a href="./my list.html">My List</a>
+                <div class="profile-dropdown">
+                    <a href="#" class="profile-link">Profile</a>
+                    <div class="dropdown-content">
+                        <a href="profile.html">Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn" class="logout-link">Logout</a>
+                    </div>
+                </div>
+            </nav>
+           
+        </div>
+    </header>
+
+    <div class="profile-container">
+        <div class="profile-layout">
+            <!-- User Info Card -->
+            <div class="user-info-card">
+                <div class="user-details">
+                    <div class="user-detail">
+                        <label>Full Name</label>
+                        <p id="display-fullname">Loading...</p>
+                    </div>
+                    <div class="user-detail">
+                        <label>Email</label>
+                        <p id="display-email">Loading...</p>
+                    </div>
+                    <div class="user-detail">
+                        <label>Username</label>
+                        <p id="display-username">Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Form -->
+            <div class="profile-form-container">
+                <h1>Edit Profile</h1>
+                
+                <form id="profile-form">
+                    <div class="form-group">
+                        <label for="full-name">Full Name</label>
+                        <input type="text" id="full-name" name="full-name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Preferred Movie Genres (Select up to 5)</label>
+                        <div class="genre-selection">
+                            <div class="genre-option">
+                                <input type="checkbox" id="action" name="genres" value="Action">
+                                <label for="action">Action</label>
+                            </div>
+                            <div class="genre-option">
+                                <input type="checkbox" id="comedy" name="genres" value="Comedy">
+                                <label for="comedy">Comedy</label>
+                            </div>
+                            <div class="genre-option">
+                                <input type="checkbox" id="drama" name="genres" value="Drama">
+                                <label for="drama">Drama</label>
+                            </div>
+                            <div class="genre-option">
+                                <input type="checkbox" id="horror" name="genres" value="Horror">
+                                <label for="horror">Horror</label>
+                            </div>
+                            <div class="genre-option">
+                                <input type="checkbox" id="sci-fi" name="genres" value="Sci-Fi">
+                                <label for="sci-fi">Sci-Fi</label>
+                            </div>
+                            <div class="genre-option">
+                                <input type="checkbox" id="romance" name="genres" value="Romance">
+                                <label for="romance">Romance</label>
+                            </div>
+                            <div class="genre-option">
+                                <input type="checkbox" id="thriller" name="genres" value="Thriller">
+                                <label for="thriller">Thriller</label>
+                            </div>
+                            <div class="genre-option">
+                                <input type="checkbox" id="animation" name="genres" value="Animation">
+                                <label for="animation">Animation</label>
+                            </div>
+                            <div class="genre-option">
+                                <input type="checkbox" id="documentary" name="genres" value="Documentary">
+                                <label for="documentary">Documentary</label>
+                            </div>
+                        </div>
+                        <p class="genre-counter">0/5 genres selected</p>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="cancel-btn">Cancel</button>
+                        <button type="submit" id="save-btn">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Psalm Strings. All rights reserved.</p>
+        <p>Terms of Use | Privacy Policy</p>
+    </div>
+
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc,
+            setDoc,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5kROT39vzmZztR4k2BzYSL3PFlio1tUM",
+            authDomain: "psalmstrings-7b9a9.firebaseapp.com",
+            projectId: "psalmstrings-7b9a9",
+            storageBucket: "psalmstrings-7b9a9.appspot.com",
+            messagingSenderId: "765832868823",
+            appId: "1:765832868823:web:0dd6e79ee4d3acde041192",
+            measurementId: "G-LV8DV0TC8E"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+    
+        // DOM elements
+        const profileForm = document.getElementById('profile-form');
+        const fullNameInput = document.getElementById('full-name');
+        const emailInput = document.getElementById('email');
+        const usernameInput = document.getElementById('username');
+        const genreCheckboxes = document.querySelectorAll('input[name="genres"]');
+        const genreCounter = document.querySelector('.genre-counter');
+        const logoutBtn = document.getElementById('logout-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const displayFullname = document.getElementById('display-fullname');
+        const displayEmail = document.getElementById('display-email');
+        const displayUsername = document.getElementById('display-username');
+    
+        // Maximum number of selectable genres
+        const MAX_GENRES = 5;
+        let selectedGenres = [];
+    
+        // Load user data when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
+        });
+    
+        // Load user data from Firestore
+        async function loadUserData() {
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    window.location.href = '/auth/login.html';
+                    return;
+                }
+    
+                // Set email from auth
+                emailInput.value = user.email;
+                displayEmail.textContent = user.email;
+    
+                // Get user profile from Firestore
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+    
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    
+                    // Set name from "name" field in Firestore
+                    const name = userData.name || '';
+                    fullNameInput.value = name;
+                    displayFullname.textContent = name;
+                    
+                    // Set username
+                    usernameInput.value = userData.username || '';
+                    displayUsername.textContent = userData.username || 'Not set';
+                    
+                    // Set selected genres - initialize empty array if not exists
+                    selectedGenres = userData.genres || [];
+                    updateGenreSelection();
+                } else {
+                    // Initialize new user document if it doesn't exist
+                    await setDoc(userRef, {
+                        name: '', // Initialize empty name field
+                        email: user.email,
+                        createdAt: serverTimestamp(),
+                        genres: [] // Initialize empty genres array
+                    });
+                }
+            });
+        }
+    
+        // Update genre selection UI
+        function updateGenreSelection() {
+            // Update checkboxes
+            genreCheckboxes.forEach(checkbox => {
+                checkbox.checked = selectedGenres.includes(checkbox.value);
+            });
+            
+            // Update counter
+            genreCounter.textContent = `${selectedGenres.length}/${MAX_GENRES} genres selected`;
+            
+            // Disable unchecked boxes if max reached
+            if (selectedGenres.length >= MAX_GENRES) {
+                genreCheckboxes.forEach(checkbox => {
+                    if (!checkbox.checked) {
+                        checkbox.disabled = true;
+                    }
+                });
+            } else {
+                genreCheckboxes.forEach(checkbox => {
+                    checkbox.disabled = false;
+                });
+            }
+        }
+    
+        // Handle genre selection
+        genreCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    if (selectedGenres.length < MAX_GENRES) {
+                        selectedGenres.push(e.target.value);
+                    } else {
+                        e.target.checked = false;
+                        return;
+                    }
+                } else {
+                    selectedGenres = selectedGenres.filter(genre => genre !== e.target.value);
+                }
+                
+                updateGenreSelection();
+            });
+        });
+    
+        // Save profile data
+        profileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const user = auth.currentUser;
+            if (!user) return;
+    
+            // Disable save button during processing
+            const saveBtn = document.getElementById('save-btn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+    
+            try {
+                const userRef = doc(db, "users", user.uid);
+                
+                // Prepare data to save
+                const userData = {
+                    name: fullNameInput.value.trim(), // Save as "name" field
+                    username: usernameInput.value.trim(),
+                    genres: selectedGenres,
+                    lastUpdated: serverTimestamp(),
+                    email: user.email // Ensure email is always included
+                };
+                
+                // Save to Firestore
+                await setDoc(userRef, userData, { merge: true });
+    
+                // Update display in user info card
+                displayFullname.textContent = userData.name;
+                displayUsername.textContent = userData.username;
+                
+                showToast('Profile updated successfully!');
+            } catch (error) {
+                console.error("Error updating profile:", error);
+                showToast('Failed to update profile', true);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Changes';
+            }
+        });
+    
+        // Cancel button - reset form to saved values
+        cancelBtn.addEventListener('click', () => {
+            loadUserData();
+            showToast('Changes discarded');
+        });
+    
+        // Logout button
+        logoutBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            try {
+                await signOut(auth);
+                window.location.href = '../index.html';
+            } catch (error) {
+                console.error("Error signing out:", error);
+                showToast('Failed to logout', true);
+            }
+        });
+    
+        // Show toast notification
+        function showToast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.position = 'fixed';
+            toast.style.bottom = '20px';
+            toast.style.left = '50%';
+            toast.style.transform = 'translateX(-50%)';
+            toast.style.padding = '12px 24px';
+            toast.style.backgroundColor = isError ? '#f44336' : '#4CAF50';
+            toast.style.color = 'white';
+            toast.style.borderRadius = '4px';
+            toast.style.zIndex = '1000';
+            toast.style.transition = 'opacity 0.5s';
+            document.body.appendChild(toast);
+    
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const rightSide = document.querySelector('.right-side');
+            
+            // Toggle menu when hamburger is clicked
+            hamburger.addEventListener('click', function() {
+                rightSide.classList.toggle('active');
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.hamburger') && !event.target.closest('.right-side')) {
+                    rightSide.classList.remove('active');
+                }
+            });
+            
+            // Close menu when a nav link is clicked (optional)
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        rightSide.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    rightSide.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

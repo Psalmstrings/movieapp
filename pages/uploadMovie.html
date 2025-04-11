@@ -1,0 +1,277 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Upload Movie</title>  
+    <style>  
+        * {  
+            margin: 0;  
+            padding: 0;  
+            box-sizing: border-box;  
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;  
+        }  
+
+        body {  
+            background-color: #141414;  
+            color: white;  
+        }  
+
+        /* Header Styles */  
+        .header {  
+            background-color: #000000;  
+            padding: 20px 50px;  
+            display: flex;  
+            justify-content: space-between;  
+            align-items: center;  
+        }  
+
+        .header button {  
+            padding: 10px;  
+            background: rgb(252, 210, 24);  
+            border: none;  
+            border-radius: 5px;  
+            font-size: 1.1rem;  
+            font-weight: bold;  
+            color: black;  
+            cursor: pointer;  
+        }  
+
+        .logo {  
+            color: rgb(252, 210, 24);  
+            font-size: 2rem;  
+            font-weight: bold;  
+        }  
+
+        .nav-links a {  
+            color: white;  
+            text-decoration: none;  
+            margin-left: 30px;  
+            font-size: 1.1rem;  
+        }  
+
+        /* Main Content */  
+        .signup-container {  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            min-height: 100vh;  
+            padding: 20px;  
+        }  
+
+        .uploadMovie-form {  
+            background: rgba(0, 0, 0, 0.8);  
+            padding: 40px;  
+            border-radius: 10px;  
+            width: 100%;  
+            max-width: 600px;  
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);  
+        }  
+
+        .form-title {  
+            color: rgb(252, 210, 24);  
+            font-size: 2.5rem;  
+            margin-bottom: 30px;  
+            text-align: center;  
+        }  
+
+        .form-group {  
+            margin-bottom: 20px;  
+        }  
+
+        .form-group label {  
+            display: block;  
+            margin-bottom: 8px;  
+            color: #fff;  
+            font-size: 1rem;  
+        }  
+
+        .form-group input {  
+            width: 100%;  
+            padding: 12px;  
+            background: rgba(255, 255, 255, 0.1);  
+            border: none;  
+            border-radius: 5px;  
+            color: white;  
+            font-size: 1rem;  
+        }  
+        .form-group textarea {  
+            width: 100%;  
+            padding: 12px;  
+            background: rgba(255, 255, 255, 0.1);  
+            border: none;  
+            border-radius: 5px;  
+            color: white;  
+            font-size: 1rem;  
+        }  
+        select option{  
+            color: black;  
+        }  
+        .form-group select {  
+            width: 100%;  
+            padding: 12px;  
+            background: rgba(255, 255, 255, 0.1);  
+            border: none;  
+            border-radius: 5px;  
+            color: white;  
+            font-size: 1rem;  
+        }  
+        .form-group input:focus {  
+            outline: 2px solid rgb(252, 210, 24);  
+            background: rgba(255, 255, 255, 0.2);  
+        }  
+
+        .submit-btn {  
+            width: 100%;  
+            padding: 15px;  
+            background: rgb(252, 210, 24);  
+            border: none;  
+            border-radius: 5px;  
+            font-size: 1.1rem;  
+            font-weight: bold;  
+            color: black;  
+            cursor: pointer;  
+            transition: background-color 0.3s ease;  
+        }  
+
+        .submit-btn:hover {  
+            background: rgb(143, 117, 4);  
+        }  
+
+
+        /* Responsive Design */  
+        @media (max-width: 768px) {  
+            .header {  
+                padding: 20px;  
+                flex-direction: column;  
+                gap: 20px;  
+            }  
+
+            .signup-form {  
+                padding: 20px;  
+            }   
+            .header button{  
+                display: none;  
+            }   
+        }  
+
+        /* Optional: Form Validation Error Styles */  
+        .error {  
+            color: #E50914;  
+            font-size: 18px;  
+            margin-top: 5px;  
+            /* display: none;   */  
+        }  
+    </style>   
+</head>  
+<body>  
+    <main class="signup-container">  
+        <form class="uploadMovie-form" id="uploadMovieForm">  
+            <h1 class="form-title">Upload a Movie</h1>  
+            <div class="form-group">  
+                <label for="movieName">Movie Title</label>  
+                <input type="text" id="movieName" required>  
+            </div>  
+            <div class="form-group">  
+                <label for="releaseDate">Date of Release</label>  
+                <input type="date" id="releaseDate" required>  
+            </div>   
+            <div class="form-group">  
+                <label for="category" class="selectlabel">Category</label>  
+                <select class="selectOpt" id="category" required>  
+                    <option value="" disabled selected>Select Category</option>  
+                    <option value="Action">Action</option>  
+                    <option value="Nollywood">Nollywood</option>  
+                    <option value="Hollywood">Hollywood</option>  
+                    <option value="Comedy">Comedy</option>  
+                    <option value="Horror">Horror</option>  
+                </select>  
+            </div>  
+            <div class="form-group">  
+                <label for="description" class="form-label">Description</label>  
+                <textarea class="textDes" required></textarea>  
+            </div>  
+            <div class="form-group">  
+                <label for="image" class="form-label">Upload Product Image</label>  
+                <input type="file" class="form-control" id="image" accept="image/*" required>  
+                <img id="imagePreview" class="img-fluid mt-2 d-none" style="max-width: 200px;">  
+            </div>  
+            <button type="submit" class="submit-btn" id="submitBTN">Upload Movie</button>   
+        </form>  
+    </main>   
+    
+    <script type="module">  
+        // Import the functions you need from the SDKs you need  
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";  
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";  
+
+       const firebaseConfig = {  
+            apiKey: "AIzaSyC5kROT39vzmZztR4k2BzYSL3PFlio1tUM",  
+            authDomain: "psalmstrings-7b9a9.firebaseapp.com",  
+            projectId: "psalmstrings-7b9a9",  
+            storageBucket: "psalmstrings-7b9a9.firebasestorage.app",  
+            messagingSenderId: "765832868823",  
+            appId: "1:765832868823:web:0dd6e79ee4d3acde041192",  
+            measurementId: "G-LV8DV0TC8E"  
+        };  
+
+        // Initialize Firebase  
+        const app = firebase.initializeApp(firebaseConfig);  
+        const db = firebase.firestore(app);  
+
+        // Reference to the form and elements  
+        const uploadMovieForm = document.getElementById("uploadMovieForm");  
+        const imageInput = document.getElementById("image");  
+        const imagePreview = document.getElementById("imagePreview");  
+        const submitBTN = document.getElementById("submitBTN");  
+    // Image Preview
+    imageInput.addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.remove("d-none");
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Create Product Function
+        createMovieForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            // spinner.classList.remove("d-none");
+            submitBTN.disabled = true;
+
+            const file = imageInput.files[0];
+            const reader = new FileReader();
+
+            reader.onloadend = async function() {
+                const movieDetails = {
+                    name: document.getElementById("movieName").value.trim(),
+                    releaseDate: parseFloat(document.getElementById("releaseDate").value),
+                    category: document.getElementById("category").value.trim(),
+                    description: document.getElementById("description").value.trim(),
+                    image: reader.result
+                };
+
+                try {
+                    await addDoc(collection(db, "movies"), movieDetails);
+                    alert("Product created successfully!");
+                    createMovieForm.reset();
+                    imagePreview.classList.add("d-none");
+                    location.href = "./sellerPage.html"
+                } catch (error) {
+                    console.error("Error adding product:", error);
+                    alert("Failed to create product.");
+                } finally {
+                    // spinner.classList.add("d-none");
+                    submitBTN.disabled = false;
+                }
+            };
+
+            reader.readAsDataURL(file);
+        });
+    </script>  
+</body>  
+</html>  
