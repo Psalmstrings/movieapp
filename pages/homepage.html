@@ -55,7 +55,7 @@
               src="../media/AAAABa_KC_9PKT4jIsljf3hgc4mpyoiW45UI2IUXOiGYCwuJxDt38mT2xGoda-_Stuyo9IkdCs2_BHOc01L9MiCz_3-WpnUjbfdzCtg.png"
               alt=""
             />
-            <h3>Stranger Things</h3>
+            <h3>BlackList</h3>
             <p>Season 4, Episode 1</p>
             <button>play</button>
             <button type="submit" id="watchList">Watchlist</button>
@@ -73,7 +73,7 @@
               src="../media/AAAABb5k96r-Cn_W9kRrg944RVSLsx7BiUR1Euxd6pS1swDQHLIrUOB_rFbqT67DQhLSFrIcdHy5cWOPn-VdtXlxp0rNiJDXPHXLnRMd1G-a2TE75dmLhnP4zANmHVkntEezqUr3.png"
               alt=""
             />
-            <h3>Another Show</h3>
+            <h3>The Recruit</h3>
             <p>Season 2, Episode 5</p>
             <button>play</button>
             <button type="submit" id="watchList">Watchlist</button>
@@ -91,7 +91,7 @@
               src="../media/AAAABc4kYiVc4FL5P9VvUT5MW17iXQk4pBEf1ZAE7kFVVYhUDVkBqCl2g5g32r2vhy4_yGSKy18-SPNaDpu5LDtd7MzvE7bkjgHlmXESrqBvCDLYRi5qcVvxd14D33qyR7j-N0o1.png"
               alt=""
             />
-            <h3>Stranger Things</h3>
+            <h3>DesignatedSurvivor</h3>
             <p>Season 4, Episode 1</p>
             <button>play</button>
             <button type="submit" id="watchList">Watchlist</button>
@@ -109,7 +109,7 @@
               src="../media/AAAABc6LmU2jEqh3VRHrKHnw9yLjNCTnzi4f2vTT54_Bo23t4SiWNRimug0jXj3vsPrBAAngEWz4L3a6o7JNRAMmNGqck10bekVyZt4lOE_oq4ZcNnOYfzy6MiE2JiOqWj7SUC3ghpOts64ZrI2pNvLlzYj0ZfMKMAZY8_jDvaqPbplBUdrCx9lxr9BTusYp5BR_0D9zjcXIjPj.png"
               alt=""
             />
-            <h3>Stranger Things</h3>
+            <h3>You</h3>
             <p>Season 4, Episode 1</p>
             <button>play</button>
             <button type="submit" id="watchList">Watchlist</button>
@@ -127,7 +127,7 @@
               src="../media/AAAABdrBICZV_FzDth-NMDVBnYnFdrU7LBPq0aNjW0S0pnbEpAGoTeEg4BIzTzQT_VKo5V9Rgo7cHTObtD8EGsIGENgtVoZTPyfnhlCgjLLaahUwUQQXy1Olc0nX04n8bK9y-avUzjjNwh_crmM8HiZ7x3vQUxEbkznCpc8.png"
               alt=""
             />
-            <h3>Stranger Things</h3>
+            <h3>DEVA</h3>
             <p>Season 4, Episode 1</p>
             <button>play</button> <button type="submit" id="watchList">Watchlist</button>
           </div>
@@ -144,7 +144,7 @@
               src="../media/AAAABa_KC_9PKT4jIsljf3hgc4mpyoiW45UI2IUXOiGYCwuJxDt38mT2xGoda-_Stuyo9IkdCs2_BHOc01L9MiCz_3-WpnUjbfdzCtg.png"
               alt=""
             />
-            <h3>Stranger Things</h3>
+            <h3>Blacklist</h3>
             <p>Season 4, Episode 1</p>
             <button>play</button> <button type="submit" id="watchList">Watchlist</button>
           </div>
@@ -497,247 +497,300 @@
       <p>Terms of Use | Privacy Policy</p>
     </div>
 
-    <script type="module">
-      // Import Firebase modules - SINGLE IMPORT SET
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-      import { 
-          getFirestore, 
-          doc, 
-          setDoc,
-          serverTimestamp
-      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-      import { 
-          getAuth,
-          onAuthStateChanged,
-          signOut
-      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-      // Firebase configuration
-      const firebaseConfig = {
-          apiKey: "AIzaSyC5kROT39vzmZztR4k2BzYSL3PFlio1tUM",
-          authDomain: "psalmstrings-7b9a9.firebaseapp.com",
-          projectId: "psalmstrings-7b9a9",
-          storageBucket: "psalmstrings-7b9a9.appspot.com",
-          messagingSenderId: "765832868823",
-          appId: "1:765832868823:web:0dd6e79ee4d3acde041192",
-          measurementId: "G-LV8DV0TC8E"
-      };
-
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
-      const auth = getAuth(app);
-
-      // Mobile menu functionality
-      document.addEventListener('DOMContentLoaded', function() {
-          const hamburger = document.querySelector('.hamburger');
-          const rightSide = document.querySelector('.right-side');
-          const profileDropdown = document.querySelector('.profile-dropdown');
-          const profileLink = document.querySelector('.profile-link');
-          
-          // Toggle menu visibility when hamburger is clicked
-          hamburger.addEventListener('click', function(e) {
-              e.stopPropagation();
-              rightSide.classList.toggle('active');
-          });
-          
-          // Toggle profile dropdown
-          profileLink.addEventListener('click', function(e) {
-              e.preventDefault();
-              e.stopPropagation();
-              this.nextElementSibling.classList.toggle('show');
-          });
-          
-          // Close menu when clicking outside
-          document.addEventListener('click', function(event) {
-              if (!event.target.closest('.right-side') && !event.target.closest('.hamburger')) {
-                  rightSide.classList.remove('active');
-              }
-              if (!event.target.closest('.profile-dropdown')) {
-                  document.querySelectorAll('.dropdown-content').forEach(d => {
-                      d.classList.remove('show');
-                  });
-              }
-          });
-      });
-
-      // Watchlist functionality
-      function setupWatchlistButtons(user) {
-          document.querySelectorAll('#watchList').forEach(button => {
-              button.addEventListener('click', async function(event) {
-                  event.preventDefault();
-                  
-                  if (!user) {
-                      alert('Please sign in to add to your watchlist');
-                      return;
-                  }
-
-                  try {
-                      const contentItem = this.closest('.content-info');
-                      const title = contentItem.querySelector('h3').textContent;
-                      const episodeInfo = contentItem.querySelector('p').textContent;
-                      const imageUrl = contentItem.querySelector('img').src;
-                      const userId = user.uid;
-
-                      // Create a unique ID for this watchlist item
-                      const docId = `${userId}_${title.replace(/\s+/g, '_')}_${Date.now()}`;
-
-                      // Add to Firestore
-                      await setDoc(doc(db, "watchlist", docId), {
-                          title: title,
-                          episode: episodeInfo,
-                          imageUrl: imageUrl,
-                          userId: userId,
-                          addedAt: serverTimestamp()
-                      });
-
-                      // Update UI to show success
-                      this.textContent = 'Added';
-                      this.style.backgroundColor = '#4CAF50';
-                      this.style.color = 'white';
-                      this.style.border = 'none';
-                      this.disabled = true;
-
-                      // Show toast notification
-                      showToast('Added to your watchlist!');
-                      
-                  } catch (error) {
-                      console.error("Error adding to watchlist:", error);
-                      showToast('Failed to add to watchlist', true);
-                  }
-              });
-          });
-      }
-
-      // Search functionality with debounce
-      let searchTimeout;
-      const searchBar = document.querySelector('.search-bar');
-      const searchResultsPopup = document.createElement('div');
-      searchResultsPopup.className = 'search-results-popup';
-      searchResultsPopup.style.display = 'none';
-      document.body.appendChild(searchResultsPopup);
-
-      function getAllMovies() {
-          const movies = [];
-          document.querySelectorAll('.content-info').forEach(content => {
-              const title = content.querySelector('h3').textContent;
-              const image = content.querySelector('img').src;
-              movies.push({ title, image, element: content.closest('.content-item') });
-          });
-          return movies;
-      }
-
-      const allMovies = getAllMovies();
-
-      searchBar.addEventListener('input', function(e) {
-          clearTimeout(searchTimeout);
-          searchTimeout = setTimeout(() => {
-              const searchTerm = e.target.value.toLowerCase().trim();
+    <script type="module">  
+      // Import Firebase modules  
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";  
+      import {   
+        getFirestore,   
+        doc,   
+        setDoc,  
+        serverTimestamp  
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";  
+      import {   
+        getAuth,  
+        onAuthStateChanged,  
+        signOut  
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";  
+    
+      // Firebase configuration  
+      const firebaseConfig = {  
+        apiKey: "AIzaSyC5kROT39vzmZztR4k2BzYSL3PFlio1tUM",  
+        authDomain: "psalmstrings-7b9a9.firebaseapp.com",  
+        projectId: "psalmstrings-7b9a9",  
+        storageBucket: "psalmstrings-7b9a9.appspot.com",  
+        messagingSenderId: "765832868823",  
+        appId: "1:765832868823:web:0dd6e79ee4d3acde041192",  
+        measurementId: "G-LV8DV0TC8E"  
+      };  
+    
+      // Initialize Firebase  
+      const app = initializeApp(firebaseConfig);  
+      const db = getFirestore(app);  
+      const auth = getAuth(app);  
+    
+      // DOM Ready  
+      document.addEventListener('DOMContentLoaded', function() {  
+        initMobileMenu();  
+        initSearch();  
+        initAuth();  
+      });  
+    
+      // Mobile Menu  
+      function initMobileMenu() {  
+        const hamburger = document.querySelector('.hamburger');  
+        const rightSide = document.querySelector('.right-side');  
+        const profileLink = document.querySelector('.profile-link');  
+        
+        if (!hamburger || !rightSide || !profileLink) return;  
+    
+        hamburger.addEventListener('click', function(e) {  
+          e.stopPropagation();  
+          rightSide.classList.toggle('active');  
+        });  
+        
+        profileLink.addEventListener('click', function(e) {  
+          e.preventDefault();  
+          e.stopPropagation();  
+          this.nextElementSibling?.classList.toggle('show');  
+        });  
+        
+        document.addEventListener('click', function(event) {  
+          if (!event.target.closest('.right-side') && !event.target.closest('.hamburger')) {  
+            rightSide.classList.remove('active');  
+          }  
+          if (!event.target.closest('.profile-dropdown')) {  
+            document.querySelectorAll('.dropdown-content').forEach(d => {  
+              d.classList.remove('show');  
+            });  
+          }  
+        });  
+      }  
+    
+      // Watchlist  
+      function setupWatchlistButtons(user) {  
+        document.querySelectorAll('#watchList').forEach(button => {  
+          button.addEventListener('click', async function(event) {  
+            event.preventDefault();  
+            
+            if (!user) {  
+              showToast('Please sign in to add to your watchlist', true);  
+              return;  
+            }  
+    
+            const contentItem = this.closest('.content-info');  
+            if (!contentItem) return;  
+    
+            const title = contentItem.querySelector('h3')?.textContent;  
+            const episodeInfo = contentItem.querySelector('p')?.textContent;  
+            const imageUrl = contentItem.querySelector('img')?.src;  
+            
+            if (!title || !episodeInfo || !imageUrl) {  
+              console.error("Missing required content data");  
+              return;  
+            }  
+    
+            try {  
+              const userId = user.uid;  
+              const docId = `${userId}_${title.replace(/\s+/g, '_')}_${Date.now()}`;  
+    
+              await setDoc(doc(db, "watchlist", docId), {  
+                title: title,  
+                episode: episodeInfo,  
+                imageUrl: imageUrl,  
+                userId: userId,  
+                addedAt: serverTimestamp()  
+              });  
+    
+              this.textContent = 'Added';  
+              this.style.backgroundColor = '#4CAF50';  
+              this.style.color = 'white';  
+              this.style.border = 'none';  
+              this.disabled = true;  
+    
+              showToast('Added to your watchlist!');  
               
-              if (searchTerm.length === 0) {
-                  searchResultsPopup.style.display = 'none';
-                  return;
-              }
+            } catch (error) {  
+              console.error("Error adding to watchlist:", error);  
+              showToast('Failed to add to watchlist', true);  
+            }  
+          });  
+        });  
+      }  
+      
+       // Add this CSS for the search results  
+  const style = document.createElement('style');  
+  style.textContent = `  
+    .search-results-popup {  
+      position: absolute;  
+      background: #1a1a1a;  
+      border: 1px solid #333;  
+      border-radius: 4px;  
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);  
+      z-index: 1000;  
+      max-height: 300px;  
+      overflow-y: auto;  
+    }  
+    .search-result-item {  
+      display: flex;  
+      align-items: center;  
+      padding: 8px 12px;  
+      cursor: pointer;  
+      transition: background 0.2s;  
+    }  
+    .search-result-item:hover {  
+      background: #333;  
+    }  
+    .search-result-item img {  
+      width: 40px;  
+      height: 40px;  
+      object-fit: cover;  
+      margin-right: 10px;  
+      border-radius: 2px;  
+    }  
+    .no-results {  
+      padding: 12px;  
+      color: #999;  
+    }  
+  `;  
+  document.head.appendChild(style);
 
-              const results = allMovies.filter(movie => 
-                  movie.title.toLowerCase().includes(searchTerm))
-                  .slice(0, 5);
 
-              if (results.length > 0) {
-                  searchResultsPopup.innerHTML = results.map(movie => `
-                      <div class="search-result-item" data-movie-id="${movie.title}">
-                          <img src="${movie.image}" alt="${movie.title}">
-                          <span>${movie.title}</span>
-                      </div>
-                  `).join('');
-                  
-                  const searchRect = searchBar.getBoundingClientRect();
-                  searchResultsPopup.style.top = `${searchRect.bottom + window.scrollY}px`;
-                  searchResultsPopup.style.left = `${searchRect.left + window.scrollX}px`;
-                  searchResultsPopup.style.width = `${searchRect.width}px`;
-                  searchResultsPopup.style.display = 'block';
-              } else {
-                  searchResultsPopup.innerHTML = '<div class="no-results">No movies found</div>';
-                  searchResultsPopup.style.display = 'block';
-              }
-          }, 300);
-      });
-
-      searchResultsPopup.addEventListener('click', function(e) {
-          const item = e.target.closest('.search-result-item');
-          if (item) {
-              const movieTitle = item.getAttribute('data-movie-id');
-              const movie = allMovies.find(m => m.title === movieTitle);
+      // Search  
+      function initSearch() {  
+        const searchBar = document.querySelector('.search-bar');  
+        if (!searchBar) return;  
+    
+        const searchResultsPopup = document.createElement('div');  
+        searchResultsPopup.className = 'search-results-popup';  
+        searchResultsPopup.style.display = 'none';  
+        document.body.appendChild(searchResultsPopup);  
+    
+        const allMovies = Array.from(document.querySelectorAll('.content-info')).map(content => {  
+          return {  
+            title: content.querySelector('h3')?.textContent || '',  
+            image: content.querySelector('img')?.src || '',  
+            element: content.closest('.content-item')  
+          };  
+        }).filter(movie => movie.title && movie.image && movie.element);  
+    
+        let searchTimeout;  
+    
+        searchBar.addEventListener('input', function(e) {  
+          clearTimeout(searchTimeout);  
+          searchTimeout = setTimeout(() => {  
+            const searchTerm = e.target.value.toLowerCase().trim();  
+            
+            if (searchTerm.length === 0) {  
+              searchResultsPopup.style.display = 'none';  
+              return;  
+            }  
+    
+            const results = allMovies.filter(movie =>   
+              movie.title.toLowerCase().includes(searchTerm)  
+            ).slice(0, 5);  
+    
+            if (results.length > 0) {  
+              searchResultsPopup.innerHTML = results.map(movie => `  
+                <div class="search-result-item" data-movie-id="${movie.title}">  
+                  <img src="${movie.image}" alt="${movie.title}">  
+                  <span>${movie.title}</span>  
+                </div>  
+              `).join('');  
               
-              if (movie && movie.element) {
-                  movie.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  movie.element.style.boxShadow = '0 0 0 3px rgba(255, 255, 255, 0.5)';
-                  setTimeout(() => {
-                      movie.element.style.boxShadow = 'none';
-                  }, 2000);
-                  
-                  searchResultsPopup.style.display = 'none';
-                  searchBar.value = '';
-              }
-          }
-      });
-
-      document.addEventListener('click', function(e) {
-          if (!searchBar.contains(e.target) && !searchResultsPopup.contains(e.target)) {
-              searchResultsPopup.style.display = 'none';
-          }
-      });
-
-      // Logout functionality
-      function handleLogout() {
-          signOut(auth).then(() => {
-              window.location.href = "../index.html"; 
-          }).catch((error) => {
-              console.error("Logout error:", error);
-              alert("Error signing out. Please try again.");
-          });
-      }
-
-      // Setup logout link
-      document.querySelector('.logout-link')?.addEventListener('click', (e) => {
-          e.preventDefault();
-          handleLogout();
-      });
-
-      // Toast notification
-      function showToast(message, isError = false) {
-          const toast = document.createElement('div');
-          toast.textContent = message;
-          toast.style.position = 'fixed';
-          toast.style.bottom = '20px';
-          toast.style.left = '50%';
-          toast.style.transform = 'translateX(-50%)';
-          toast.style.padding = '12px 24px';
-          toast.style.backgroundColor = isError ? '#f44336' : '#4CAF50';
-          toast.style.color = 'white';
-          toast.style.borderRadius = '4px';
-          toast.style.zIndex = '1000';
-          document.body.appendChild(toast);
-
-          setTimeout(() => {
-              toast.style.opacity = '0';
-              setTimeout(() => toast.remove(), 500);
-          }, 3000);
-      }
-
-      // Auth state listener
-      onAuthStateChanged(auth, (user) => {
-          if (user) {
-              setupWatchlistButtons(user);
-          } else {
-              document.querySelectorAll('#watchList').forEach(button => {
-                  button.addEventListener('click', (e) => {
-                      e.preventDefault();
-                      alert('Please sign in to add to your watchlist');
-                  });
-              });
-          }
-      });
-  </script>
+              const searchRect = searchBar.getBoundingClientRect();  
+              searchResultsPopup.style.top = `${searchRect.bottom + window.scrollY}px`;  
+              searchResultsPopup.style.left = `${searchRect.left + window.scrollX}px`;  
+              searchResultsPopup.style.width = `${searchRect.width}px`;  
+              searchResultsPopup.style.display = 'block';  
+            } else {  
+              searchResultsPopup.innerHTML = '<div class="no-results">No movies found</div>';  
+              searchResultsPopup.style.display = 'none';  
+            }  
+          }, 300);  
+        });  
+    
+        searchResultsPopup.addEventListener('click', function(e) {  
+          const item = e.target.closest('.search-result-item');  
+          if (!item) return;  
+    
+          const movieTitle = item.getAttribute('data-movie-id');  
+          const movie = allMovies.find(m => m.title === movieTitle);  
+          
+          if (movie?.element) {  
+            movie.element.scrollIntoView({ behavior: 'smooth', block: 'center' });  
+            movie.element.style.boxShadow = '0 0 0 3px rgba(255, 255, 255, 0.5)';  
+            setTimeout(() => {  
+              movie.element.style.boxShadow = 'none';  
+            }, 2000);  
+            
+            searchResultsPopup.style.display = 'none';  
+            searchBar.value = '';  
+          }  
+        });  
+    
+        document.addEventListener('click', function(e) {  
+          if (!searchBar.contains(e.target) && !searchResultsPopup.contains(e.target)) {  
+            searchResultsPopup.style.display = 'none';  
+          }  
+        });  
+      }  
+    
+      // Auth  
+      function initAuth() {  
+        const logoutLink = document.querySelector('.logout-link');  
+        if (logoutLink) {  
+          logoutLink.addEventListener('click', (e) => {  
+            e.preventDefault();  
+            handleLogout();  
+          });  
+        }  
+    
+        onAuthStateChanged(auth, (user) => {  
+          if (user) {  
+            setupWatchlistButtons(user);  
+          } else {  
+            document.querySelectorAll('#watchList').forEach(button => {  
+              button.addEventListener('click', (e) => {  
+                e.preventDefault();  
+                showToast('Please sign in to add to your watchlist', true);  
+              });  
+            });  
+          }  
+        });  
+      }  
+    
+      // Logout  
+      function handleLogout() {  
+        signOut(auth).then(() => {  
+          window.location.href = "../index.html";   
+        }).catch((error) => {  
+          console.error("Logout error:", error);  
+          showToast("Error signing out. Please try again.", true);  
+        });  
+      }  
+    
+      // Toast  
+      function showToast(message, isError = false) {  
+        const toast = document.createElement('div');  
+        toast.className = 'toast-notification';  
+        toast.textContent = message;  
+        toast.style.position = 'fixed';  
+        toast.style.bottom = '20px';  
+        toast.style.left = '50%';  
+        toast.style.transform = 'translateX(-50%)';  
+        toast.style.padding = '12px 24px';  
+        toast.style.backgroundColor = isError ? '#f44336' : '#4CAF50';  
+        toast.style.color = 'white';  
+        toast.style.borderRadius = '4px';  
+        toast.style.zIndex = '1000';  
+        toast.style.transition = 'opacity 0.5s';  
+        document.body.appendChild(toast);  
+    
+        setTimeout(() => {  
+          toast.style.opacity = '0';  
+          setTimeout(() => toast.remove(), 500);  
+        }, 3000);  
+      }  
+    </script>  
   </body>
 </html>

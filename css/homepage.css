@@ -64,7 +64,7 @@ body {
     background-color: rgb(252, 210, 24);  
     color: black;  
     outline: none;
-    width: 200px;
+    width: 350px;
 
 } 
 .search-bar::placeholder {  
